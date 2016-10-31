@@ -52,11 +52,13 @@ long *residue_div;
 
 long *history;
 
-long transform_num(long x) {
+// function used for iteration
+long f(long x) {
     long res = ((x % residue_class) + residue_class) % residue_class;
     return (residue_mul[res] * x + residue_add[res]) / residue_div[res];
 }
 
+// Prints info about the time
 void print_time_info(double elapsed_micros) {
     double elapsed_ms = elapsed_micros / 1000.0;
     double elapsed_s = elapsed_ms / 1000.0;
@@ -70,6 +72,7 @@ void print_time_info(double elapsed_micros) {
     if (elapsed_days > 0.5) printf("    %g days:\n", elapsed_days);
 }
 
+// prints info about trials, and numbers tested.
 void print_trial_info(double elapsed_micros, long total_trials) {
     printf("\nRan a total of %ld trials\n", total_trials);
     printf("    Average trials per microsecond: %lf\n", total_trials / elapsed_micros);
@@ -77,12 +80,14 @@ void print_trial_info(double elapsed_micros, long total_trials) {
     printf("    Average trials per number : %lf\n", (total_trials + 0.0) / get_range);
 }
 
+// prints out logging info
 void print_info(double elapsed_micros, long total_trials) {
     print_time_info(elapsed_micros);
     print_trial_info(elapsed_micros, total_trials);
     printf("\n");
 }
 
+// main
 int main(int argc, char *argv[]) {
     int ci = 0;
     MIN = strtol(argv[++ci], NULL, 10);
@@ -126,7 +131,7 @@ int main(int argc, char *argv[]) {
         current_repeated = false;
         while (trials < MAX_TRIALS) {
             history[trials] = r_x;
-            r_x = transform_num(r_x);
+            r_x = f(r_x);
             for (i = 0; i < trials; ++i) {
                 if (history[trials] == history[i] && trials != i) {
                     current_repeated = true;
