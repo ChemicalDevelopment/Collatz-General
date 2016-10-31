@@ -38,26 +38,39 @@ if x % RESIDUECLASS = (RESIDUECLASS-1), f(x) = (a(RESIDUECLASS-1)*x+b(RESIDUECLA
 #include <stdlib.h>
 #include <stdbool.h>
 
-long MIN;
-long MAX;
-long MAX_TRIALS;
+long long MIN;
+long long MAX;
+long long MAX_TRIALS;
 
 #define get_range (double) (MAX - MIN)
 
-long residue_class;
+long long residue_class;
 
-long *residue_mul;
-long *residue_add;
-long *residue_div;
+long long running_hash = 5813;
+long long _cn = 2384912;
 
-long *history;
+long long *residue_mul;
+long long *residue_add;
+long long *residue_div;
+
+long long *history;
 
 // function used for iteration
-long f(long x) {
+long long f(long long x) {
     //what is it modulo the class?
-    long res = ((x % residue_class) + residue_class) % residue_class;
+    long long res = ((x % residue_class) + residue_class) % residue_class;
     //applies operation
     return (residue_mul[res] * x + residue_add[res]) / residue_div[res];
+}
+
+// little hacky hash function to check.
+void addtohash() {
+    int i;
+    for (i = 0; i < MAX_TRIALS; i += 20) {
+        running_hash += (i + 2) * history[i];
+        running_hash = running_hash * (running_hash / 2 + 3) * 5 + 1523;
+        running_hash = running_hash % _cn;
+    }
 }
 
 // Prints info about the time
@@ -80,16 +93,16 @@ void print_time_info(double elapsed_micros) {
 }
 
 // prints info about trials, and numbers tested.
-void print_trial_info(double elapsed_micros, long total_trials) {
+void print_trial_info(double elapsed_micros, long long total_trials) {
     // print out various averages
-    printf("\nRan a total of %ld trials\n", total_trials);
+    printf("\nRan a total of %lld trials\n", total_trials);
     printf("    Average trials per microsecond: %lf\n", total_trials / elapsed_micros);
     printf("    Average numbers checked per microsecond : %lf\n", get_range / elapsed_micros);
     printf("    Average trials per number : %lf\n", (total_trials + 0.0) / get_range);
 }
 
 // prints out logging info
-void print_info(double elapsed_micros, long total_trials) {
+void print_info(double elapsed_micros, long long total_trials) {
     // print time and trial info about the computation.
     print_time_info(elapsed_micros);
     print_trial_info(elapsed_micros, total_trials);
@@ -105,11 +118,11 @@ int main(int argc, char *argv[]) {
     MAX = strtol(argv[++ci], NULL, 10);
     MAX_TRIALS = strtol(argv[++ci], NULL, 10);
     residue_class = strtol(argv[++ci], NULL, 10);
-    residue_mul = (long *)malloc(sizeof(long) * residue_class);   
-    residue_add = (long *)malloc(sizeof(long) * residue_class);   
-    residue_div = (long *)malloc(sizeof(long) * residue_class);
-    history = (long *)malloc(sizeof(long) * MAX_TRIALS);
-    long i;
+    residue_mul = (long long *)malloc(sizeof(long long) * residue_class);   
+    residue_add = (long long *)malloc(sizeof(long long) * residue_class);   
+    residue_div = (long long *)malloc(sizeof(long long) * residue_class);
+    history = (long long *)malloc(sizeof(long long) * MAX_TRIALS);
+    long long i;
     //loop through, reading in (mul, add, div) for each residual class
     for (i = 0; i < residue_class; ++i) {
         residue_mul[i] = strtol(argv[++ci], NULL, 10);
@@ -119,17 +132,17 @@ int main(int argc, char *argv[]) {
 
     // print some basic info.
     printf("Running CollatzL v0.0.1\n");
-    printf("Testing from %ld to %ld, going up to %ld max trials\n", MIN, MAX, MAX_TRIALS);
+    printf("Testing from %lld to %lld, going up to %lld max trials\n", MIN, MAX, MAX_TRIALS);
     printf("\n");
     // print out what they entered.
     for (i = 0; i < residue_class; ++i) {
-        printf("If x %% %ld = %ld, then f(x) = ", residue_class, i);
+        printf("If x %% %lld = %lld, then f(x) = ", residue_class, i);
         if (residue_div[i] != 1 && residue_add[i] != 0) printf("(");
-        if (residue_mul[i] != 1) printf("%ld", residue_mul[i]);
+        if (residue_mul[i] != 1) printf("%lld", residue_mul[i]);
         printf("x");
-        if (residue_add[i] != 0) printf("+%ld", residue_add[i]);
+        if (residue_add[i] != 0) printf("+%lld", residue_add[i]);
         if (residue_div[i] != 1 && residue_add[i] != 0) printf(")");
-        if (residue_div[i] != 1) printf("/%ld", residue_div[i]);
+        if (residue_div[i] != 1) printf("/%lld", residue_div[i]);
         printf("\n");
     }
 
@@ -140,7 +153,7 @@ int main(int argc, char *argv[]) {
     clock_t start, end;
     // init to keep track of what repeated.
     bool all_repeated = true, one_repeated = false, current_repeated;
-    long x, r_x, trials, total_trials = 0, total_repeats = 0;
+    long long x, r_x, trials, total_trials = 0, total_repeats = 0;
     start = clock();
     // loop through their min and max, checking each
     for (x = MIN; x <= MAX; ++x) {
@@ -164,12 +177,13 @@ int main(int argc, char *argv[]) {
         all_repeated = all_repeated && current_repeated;
         one_repeated = one_repeated || current_repeated;
         if (!current_repeated) {
-            printf("%ld does not repeat\n", x);
+            printf("%lld does not repeat\n", x);
         } else {
             total_repeats += 1;
         }
         // add however many we just did
         total_trials += trials;
+        addtohash();
     }
     end = clock();
     //compute elapsed microseconds (1 millionth of a second)
@@ -177,17 +191,21 @@ int main(int argc, char *argv[]) {
 
     // print out special message if they all repeated
     if (all_repeated) {
-        printf("All tested inputs repeat (%ld total)\n", total_repeats);
+        printf("All tested inputs repeat (%lld total)\n", total_repeats);
     } else {
-        printf("%ld numbers repeated\n", total_repeats);
+        printf("%lld numbers repeated\n", total_repeats);
     }
 
     // print out more info
     print_info(elapsed_micros, total_trials);
+
+
+    printf("Hash: %lld\n", running_hash);
 
     // free memory
     free(residue_add);
     free(residue_mul);
     free(residue_div);
     free(history);
+    return 0;
 }
