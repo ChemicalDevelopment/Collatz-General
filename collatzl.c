@@ -42,7 +42,7 @@ long MIN;
 long MAX;
 long MAX_TRIALS;
 
-#define get_range MAX - MIN
+#define get_range (double) (MAX - MIN)
 
 long residue_class;
 
