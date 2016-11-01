@@ -48,11 +48,13 @@ int main(int argc, char *argv[]) {
             for (i = 0; i <= trials; ++i) {
                 if (mpz_cmp(r_x, history[i]) == 0) {
                     current_repeated = true;
-                    goto skipahead;
                 }
             }
             // we increment how many trials we've done
             trials++;
+            if (current_repeated) {
+                goto skipahead;
+            }
         }
         //label this so we can skip out
         skipahead:;
