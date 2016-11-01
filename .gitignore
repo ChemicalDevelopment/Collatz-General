@@ -1,4 +1,8 @@
 .vscode
 *.o
 *.pyc
+collatzl.spec
+build/
+dist/
+
 
