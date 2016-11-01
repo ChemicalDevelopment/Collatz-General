@@ -87,18 +87,18 @@ void read_args(char *argv[]) {
 // have an index to read in from argv
     int ci = 0;
     //Read in values, incrementing ci each time
-    MIN = strtol(argv[++ci], NULL, 10);
-    RANGE = strtol(argv[++ci], NULL, 10);
-    MAX_TRIALS = strtol(argv[++ci], NULL, 10);
-    residue_class = strtol(argv[++ci], NULL, 10);
+    MIN = strtoll(argv[++ci], NULL, 10);
+    RANGE = strtoll(argv[++ci], NULL, 10);
+    MAX_TRIALS = strtoll(argv[++ci], NULL, 10);
+    residue_class = strtoll(argv[++ci], NULL, 10);
     residue_mul = (long long *)malloc(sizeof(long long) * residue_class);   
     residue_add = (long long *)malloc(sizeof(long long) * residue_class);   
     residue_div = (long long *)malloc(sizeof(long long) * residue_class);
     long long i;
     //loop through, reading in (mul, add, div) for each residual class
     for (i = 0; i < residue_class; ++i) {
-        residue_mul[i] = strtol(argv[++ci], NULL, 10);
-        residue_add[i] = strtol(argv[++ci], NULL, 10);
-        residue_div[i] = strtol(argv[++ci], NULL, 10);
+        residue_mul[i] = strtoll(argv[++ci], NULL, 10);
+        residue_add[i] = strtoll(argv[++ci], NULL, 10);
+        residue_div[i] = strtoll(argv[++ci], NULL, 10);
     }
 }
