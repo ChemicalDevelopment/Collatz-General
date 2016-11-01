@@ -1,6 +1,6 @@
 CC=gcc
 
-default: test_c
+default: all_c
 
 all: all_c all_gmp
 

@@ -89,11 +89,13 @@ int main(int argc, char *argv[]) {
             for (i = 0; i <= trials; ++i) {
                 if (r_x == history[i]) {
                     current_repeated = true;
-                    goto skipahead;
                 }
             }
-            // we increment how many trials we've done
             trials++;
+            if (current_repeated) {
+                goto skipahead;
+            }
+            // we increment how many trials we've done
         }
         //label this so we can skip out
         skipahead:;
