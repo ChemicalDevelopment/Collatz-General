@@ -7,6 +7,8 @@
 
 #include "glib.h"
 
+mp_bitcnt_t dft = 1000000000;
+
 mpz_t *history;
 
 mpz_t tmp;
@@ -27,12 +29,12 @@ int main(int argc, char *argv[]) {
     // init to keep track of what repeated.
     long long x, i, trials;
 	mpz_t r_x;
-	mpz_init(r_x);
-	mpz_init(tmp);
+	mpz_init2(r_x, dft);
+	mpz_init2(tmp, dft);
     
     history = (mpz_t *)malloc(sizeof(mpz_t) * MAX_TRIALS);
 	for (i = 0; i < MAX_TRIALS; ++i) {
-		mpz_init(history[i]);
+		mpz_init2(history[i], dft);
 	}
     
     print_start_info();
