@@ -1,26 +1,26 @@
 CC=gcc
 
-default: c
+default: test_c
 
-all: c gmp
+all: all_c all_gmp
 
-test: test_collatzl_c test_collatzl_gmp
+test: test_gmp
 
-c: collatzl_c test_collatzl_c
+all_c: c test_c
 
-gmp: collatzl_gmp test_collatzl_gmp
+all_gmp: gmp test_gmp
 
 
 # In plain C
-collatzl_c: collatzl.c glib.c
+c: collatzl.c glib.c
 	$(CC) collatzl.c glib.c -o collatzl_c.o
 
-test_collatzl_c:
+test_c:
 	./collatzl_c.o 0 1000 1000 2 1 0 2 3 1 1
 
 # with GMP
-collatzl_gmp: collatzl_gmp.c glib.c
+gmp: collatzl_gmp.c glib.c
 	$(CC) collatzl_gmp.c glib.c -lgmp -o collatzl_gmp.o
 
-test_collatzl_gmp:
+test_gmp:
 	./collatzl_gmp.o 0 1000 1000 2 1 0 2 3 1 1
