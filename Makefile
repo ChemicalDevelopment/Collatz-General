@@ -4,7 +4,7 @@ default: test_c
 
 all: all_c all_gmp
 
-test: test_gmp
+test: test_c test_gmp
 
 all_c: c test_c
 
