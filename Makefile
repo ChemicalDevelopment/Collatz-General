@@ -13,7 +13,7 @@ all_c: c test_c
 all_python: python test_python
 all_gmp: gmp test_gmp
 
-# In plain C
+# In plain Cx
 c: $(CSRC)
 	$(CC) $(CSRC) -o collatzl_c.o
 
@@ -23,7 +23,7 @@ python: $(PYSRC)
 
 # with GMP
 gmp: $(GMPSRC)
-	$(CC) $(GMPSRC) -lgmp -o collatzl_gmp.o
+	$(CC) $(GMPSRC) -lgmp -Ofast -o collatzl_gmp.o
 
 test_c:
 	./collatzl_c.o 0 1000 1000 2 1 0 2 3 1 1

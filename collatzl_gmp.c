@@ -11,12 +11,18 @@ mpz_t *history;
 
 mpz_t tmp;
 
+unsigned int res, rm, ra, rd;
+
+
 // function used for iteration
 void f(mpz_t x) {
-	unsigned int res = mpz_fdiv_r_ui(tmp, x, residue_class);
-	mpz_mul_ui(x, x, residue_mul[res]);
-	mpz_add_ui(x, x, residue_add[res]);
-	mpz_div_ui(x, x, residue_div[res]);
+	res = mpz_fdiv_r_ui(tmp, x, residue_class);
+	rm = residue_mul[res];
+	ra = residue_add[res];
+	rd = residue_div[res];
+    mpz_mul_ui(x, x, rm);
+	mpz_add_ui(x, x, ra);
+	mpz_div_ui(x, x, rd);
 }
 
 // main
@@ -45,19 +51,16 @@ int main(int argc, char *argv[]) {
         while (trials < MAX_TRIALS) {
 			mpz_set(history[trials], r_x);
             f(r_x);
-            for (i = 0; i <= trials; ++i) {
+            trials++;
+            for (i = 0; i < trials; ++i) {
                 if (mpz_cmp(r_x, history[i]) == 0) {
-                    current_repeated = true;
+                    goto skipahead;
                 }
             }
             // we increment how many trials we've done
-            trials++;
-            if (current_repeated) {
-                goto skipahead;
-            }
         }
         //label this so we can skip out
-        skipahead:;
+        skipahead:current_repeated = true;
         all_repeated = all_repeated && current_repeated;
         one_repeated = one_repeated || current_repeated;
         if (!current_repeated) {
