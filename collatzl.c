@@ -37,6 +37,7 @@ if x % RESIDUECLASS = (RESIDUECLASS-1), f(x) = (a(RESIDUECLASS-1)*x+b(RESIDUECLA
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <limits.h>
 
 #include "glib.h"
 
@@ -45,13 +46,20 @@ long long _cn = 2384912;
 
 long long *history;
 
-long long add_each_hash;
+long long add_each_hash, res;
+
+long long overflow = 0;
 
 // function used for iteration
 long long f(long long x) {
     //what is it modulo the class?
-    long long res = ((x % residue_class) + residue_class) % residue_class;
+    res = ((x % residue_class) + residue_class) % residue_class;
     //applies operation
+    //printf("%lld\n", LLONG_MAX / (x == 0 ? 1 : x));
+    if (x > LLONG_MAX / residue_mul[res]) {
+        printf("Overflow detected!\n");
+        overflow = 1;
+    }
     return (residue_mul[res] * x + residue_add[res]) / residue_div[res];
 }
 
@@ -119,6 +127,10 @@ int main(int argc, char *argv[]) {
     print_end_info(elapsed_micros, total_trials);
 
     printf("Hash: %lld\n", running_hash);
+
+    if (overflow) {
+        printf("Overflow detected. Results not accurate\n");
+    }
 
     return 0;
 }
