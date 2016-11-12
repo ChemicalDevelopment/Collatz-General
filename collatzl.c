@@ -39,6 +39,7 @@ if x % RESIDUECLASS = (RESIDUECLASS-1), f(x) = (a(RESIDUECLASS-1)*x+b(RESIDUECLA
 #include <stdbool.h>
 #include <limits.h>
 
+// our library
 #include "glib.h"
 
 long long running_hash = 5813;

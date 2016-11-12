@@ -1,32 +1,38 @@
+/*
+
+This is a library for collatzl
+
+Keeps track of the results, and reports info in the same format for each version
+
+*/
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "glib.h"
 
-long long MIN;
-long long RANGE;
-long long MAX_TRIALS;
+// Min and and range to test, up to max_trials. Residue class is the modulo used to determine function
+long long MIN, RANGE, MAX_TRIALS, residue_class;
 
-long long residue_class;
+// pointers to the arrays of residue arithmetics
+long long *residue_mul, *residue_add, *residue_div;
 
-
-long long *residue_mul;
-long long *residue_add;
-long long *residue_div;
-
+// total number of trials used, and the amount of repeats we have seen
 long long total_trials = 0, total_repeats = 0;
 
+// have they all repeated, has even one repeated, and has the current repeated
 bool all_repeated = true, one_repeated = false, current_repeated;
 
+// how many microseconds? 1000000 microseconds = 1 second
 double elapsed_micros;
 
+// prints beginning info
 void print_start_info() {
-	printf("Running CollatzL v0.0.1\n");
-    printf("Testing from %lld to %lld, going up to %lld max trials\n", MIN, MIN + RANGE, MAX_TRIALS);
-    printf("\n");
+	printf("Running CollatzL v0.1.0\n");
+    printf("Testing from %lld to %lld, going up to %lld max trials\n\n", MIN, MIN + RANGE, MAX_TRIALS);
     long long i;
-    // print out what they entered.
+    // print out what they entered as an equation
     for (i = 0; i < residue_class; ++i) {
         printf("If x %% %lld = %lld, then f(x) = ", residue_class, i);
         if (residue_div[i] != 1 && residue_add[i] != 0) printf("(");
@@ -37,7 +43,7 @@ void print_start_info() {
         if (residue_div[i] != 1) printf("/%lld", residue_div[i]);
         printf("\n");
     }
-
+    // this is the question we try to answer
 	printf("\nDoes the iteration of f(f(f(f(f...f(x))))) eventualy follow a pattern?\n\n");
 }
 
@@ -83,8 +89,9 @@ void print_end_info() {
     printf("\n");
 }
 
+// reads arguments from the arguments
 void read_args(char *argv[]) {
-// have an index to read in from argv
+    // have an index to read in from argv
     int ci = 0;
     //Read in values, incrementing ci each time
     MIN = strtoll(argv[++ci], NULL, 10);
