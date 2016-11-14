@@ -15,7 +15,7 @@ all_gmp: gmp test_gmp
 
 # In plain Cx
 c: $(CSRC)
-	$(CC) $(CSRC) -o collatzl_c.o
+	$(CC) $(CSRC) -Ofast -o collatzl_c.o
 
 # In python
 python: $(PYSRC)

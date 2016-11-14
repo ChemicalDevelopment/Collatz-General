@@ -7,8 +7,8 @@ import subprocess
 import time
 
 parser = argparse.ArgumentParser(description='CollatzL mass checker')
-parser.add_argument('-min', '--min', default=0, type=int, help='Minimum number to check')
-parser.add_argument('-range', '--range', default=25000, type=int, help='Range of numbers to check')
+parser.add_argument('-min', '--min', default='0', type=str, help='Minimum number to check')
+parser.add_argument('-range', '--range', default='25000', type=str, help='Range of numbers to check')
 parser.add_argument('-max_trials', '--max_trials', default=1000, type=int, help='Maximum number of trials')
 parser.add_argument('-t', '--threads', default=multiprocessing.cpu_count(), type=int, help='Number of threads to run')
 parser.add_argument('-pr', '--program', default="c", type=str, help='The program to use')
@@ -19,6 +19,9 @@ args = parser.parse_args()
 args.congruences = " ".join(args.congruences)
 
 args.program = args.program.lower()
+
+args.min = int(eval(args.min))
+args.range = int(eval(args.range))
 
 if args.program == "c":
     exe = "./collatzl_c.o"
@@ -32,7 +35,7 @@ queue = [None] * args.threads
 out = [None] * args.threads
 
 def fmt(id):
-    return def_cmd % (int((id * args.range) / len(queue)), int(args.range / len(queue)))
+    return def_cmd % (args.min + int((id * args.range) / len(queue)), int(args.range / len(queue)))
 
 
 print "Building program for version: %s" % args.program

@@ -81,15 +81,19 @@ int check_hist() {
     return false;
 }
 
+long long overflow_opt = LLONG_MAX / 3 - 1;
+
 long long f_opt(long long x) {
     res = x & 1;
 
     if (res) {
-        if (x >= LLONG_MAX / 3 - 1) {
+        if (x >= overflow_opt) {
             printf("Overflow detected!\n");
             overflow = 1;
         }
-        return 3 * x + 1;
+        //faster way to do 3x+1, then divide by 2
+        return x + 1 + (x>>1);
+        //return ((3*x+1)>>1);
     }
     return x >> 1;
  }
@@ -126,7 +130,6 @@ int main(int argc, char *argv[]) {
         printf("Using optimized function for the original collatz conjecture\n");
         ptr = &f_opt;
         hist_ptr = &check_hist_opt;
-        
     }
 
     history = (long long *)malloc(sizeof(long long) * MAX_TRIALS);
