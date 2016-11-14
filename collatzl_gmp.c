@@ -82,7 +82,7 @@ void f_opt(mpz_t x) {
 }
 
 int check_hist_opt() {
-    return (mpz_cmp_ui(r_x, 1) == 0) || (mpz_cmp_ui(r_x, 2) == 0) || (mpz_cmp_ui(r_x, 4) == 0);
+    return (mpz_cmp_ui(r_x, 1) == 0) || (mpz_cmp_ui(r_x, 2) == 0) || (mpz_cmp_ui(r_x, 4) == 0) || (mpz_cmp_ui(r_x, 0) == 0);
 }
 
 int eq_coef(long long *a, long long *b) {

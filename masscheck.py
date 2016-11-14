@@ -34,11 +34,19 @@ out = [None] * args.threads
 def fmt(id):
     return def_cmd % (int((id * args.range) / len(queue)), int(args.range / len(queue)))
 
+
+print "Building program for version: %s" % args.program
+
+buildcmd = subprocess.Popen("make %s" % (args.program), shell=True)
+buildcmd.wait()
+
+print "Done"
+
 start = time.time()
 for i in range(0, len(queue)):
     print "starting %d th thread" % i
     queue[i] = subprocess.Popen(fmt(i), shell=True, stderr=subprocess.PIPE)
-    
+
 
 for p in queue:
     out[queue.index(p)] = p.communicate()

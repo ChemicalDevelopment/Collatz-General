@@ -95,7 +95,7 @@ long long f_opt(long long x) {
  }
 
 int check_hist_opt() {
-    return (r_x == 1) || (r_x == 2) || (r_x == 4);
+    return (r_x == 1) || (r_x == 2) || (r_x == 4) || (r_x == 0);
 }
 
 // little hacky hash function to check.
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
     printf("Hash: %lld\n", running_hash);
 
     if (overflow) {
-        printf("Overflow detected. Results not accurate\n");
+        fprintf(stderr, "Overflow detected. Results not accurate\n");
     }
 
     return 0;
