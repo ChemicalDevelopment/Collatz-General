@@ -9,10 +9,7 @@ long long MAX_TRIALS;
 
 long long residue_class;
 
-
-long long *residue_mul;
-long long *residue_add;
-long long *residue_div;
+long long *residue_mul, *residue_add, *residue_div;
 
 long long total_trials, total_repeats;
 

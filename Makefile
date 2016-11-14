@@ -26,11 +26,11 @@ gmp: $(GMPSRC)
 	$(CC) $(GMPSRC) -lgmp -Ofast -o collatzl_gmp.o
 
 test_c:
-	./collatzl_c.o 0 1000 1000 2 1 0 2 3 1 1
+	./collatzl_c.o 0 25000 1000 2 1 0 2 3 1 1
 
 test_python:
-	./collatzl.py 0 1000 1000 2 1 0 2 3 1 1
+	./collatzl.py 0 25000 1000 2 1 0 2 3 1 1
 
 test_gmp:
-	./collatzl_gmp.o 0 1000 1000 2 1 0 2 3 1 1
+	./collatzl_gmp.o 0 25000 1000 2 1 0 2 3 1 1
 

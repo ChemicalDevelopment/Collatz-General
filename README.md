@@ -20,7 +20,7 @@ compile and test the code:
 
 There should be no errors, and the last line should read:
 
-`Hash: 1418640`
+`Hash: 2037728`
 
 If not, please open up an issue.
 

@@ -79,9 +79,14 @@ void print_trial_info() {
 void print_end_info() {
 		    // print out special message if they all repeated
     if (all_repeated) {
-        printf("All tested inputs repeat (%lld total)\n", total_repeats);
+        fprintf(stderr, "All tested inputs repeat (%lld total)\n", total_repeats);
+    } else if (one_repeated) {
+        fprintf(stderr, "%lld numbers repeated\n", total_repeats);
     } else {
-        printf("%lld numbers repeated\n", total_repeats);
+        fprintf(stderr, "None repeated\n");
+    }
+    if (!all_repeated) {
+        fprintf(stderr, "Not all repeated\n");
     }
     // print time and trial info about the computation.
     print_time_info(elapsed_micros);
