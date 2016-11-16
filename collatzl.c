@@ -47,17 +47,12 @@ Without special cases:
 // our library
 #include "glib.h"
 
-long long running_hash = 5813;
-long long _cn = 2384912;
-
 long long x, i, r_x, trials;
 
-
-long long *history;
-
-long long add_each_hash, res;
+long long res;
 
 long long overflow = 0;
+long long *history;
 
 // function used for iteration
 long long f(long long x) {
@@ -102,14 +97,6 @@ int check_hist_opt() {
     return (r_x == 1) || (r_x == 2) || (r_x == 4) || (r_x == 0);
 }
 
-// little hacky hash function to check.
-void addtohash() {
-    int i;
-    for (i = 0; i < MAX_TRIALS; i += add_each_hash) {
-        running_hash = (running_hash * (history[i] + running_hash)) % _cn;
-    }
-}
-
 int eq_coef(long long *a, long long *b) {
     return (a[0]==b[0]) && (a[1]==b[1]);
 }
@@ -134,8 +121,6 @@ int main(int argc, char *argv[]) {
 
     history = (long long *)malloc(sizeof(long long) * MAX_TRIALS);
     
-    add_each_hash = MAX_TRIALS / 4;
-
     print_start_info();
 
     //keep track of time
@@ -169,7 +154,6 @@ int main(int argc, char *argv[]) {
         }
         // add however many we just did
         total_trials += trials;
-        addtohash();
     }
 
     end = clock();
@@ -178,8 +162,6 @@ int main(int argc, char *argv[]) {
 
     // print out more info
     print_end_info(elapsed_micros, total_trials);
-
-    printf("Hash: %lld\n", running_hash);
 
     if (overflow) {
         fprintf(stderr, "Overflow detected. Results not accurate\n");

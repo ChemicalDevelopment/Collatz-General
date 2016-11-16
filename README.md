@@ -18,9 +18,7 @@ compile and test the code:
 
 `make`
 
-There should be no errors, and the last line should read:
-
-`Hash: 117472`
+There should be no errors.
 
 If not, please open up an issue.
 
