@@ -31,10 +31,6 @@ if x % RESIDUECLASS = 1, f(x) = (a1*x+b1)/c1
 . . . 
 if x % RESIDUECLASS = (RESIDUECLASS-1), f(x) = (a(RESIDUECLASS-1)*x+b(RESIDUECLASS-1))/c(RESIDUECLASS-1)
 
-Without special cases:
-426
-423
-
 
 */
 
@@ -91,7 +87,7 @@ long long f_opt(long long x) {
         //return ((3*x+1)>>1);
     }
     return x >> 1;
- }
+}
 
 int check_hist_opt() {
     return (r_x == 1) || (r_x == 2) || (r_x == 4) || (r_x == 0);
