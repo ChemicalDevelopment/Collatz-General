@@ -53,10 +53,21 @@ unsigned int res;
 
 // function used for iteration
 void f(mpz_t x) {
-	res = mpz_fdiv_r_ui(tmp, x, residue_class);
+	mpz_mod_ui(tmp, x, residue_class);
+	
+	res = mpz_get_ui(tmp);
+
+
     mpz_mul_ui(x, x, residue_mul[res]);
-	mpz_add_ui(x, x, residue_add[res]);
+	
+	if (! (residue_add[res] >> 31)) {
+		mpz_add_ui(x, x, residue_add[res]);
+	} else {
+		mpz_add_ui(x, x, -residue_add[res]);
+	}
+	
 	mpz_div_ui(x, x, residue_div[res]);
+	
 }
 
 int check_hist() {
